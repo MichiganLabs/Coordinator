@@ -1,5 +1,5 @@
 #
-#  Be sure to run `pod spec lint Coordinator.podspec' to ensure this is a
+#  Be sure to run `pod spec lint SwiftArmyKnife.podspec' to ensure this is a
 #  valid spec and to remove all comments including this before submitting the spec.
 #
 #  To learn more about Podspec attributes see https://guides.cocoapods.org/syntax/podspec.html
@@ -15,7 +15,7 @@ Pod::Spec.new do |spec|
   #  summary should be tweet-length, and the description more in depth.
   #
 
-  spec.name         = "Coordinator"
+  spec.name         = "SwiftArmyKnife"
   spec.version      = "1.0.0"
   spec.summary      = "A Swift Mixin to help coordinate views"
 
@@ -25,10 +25,10 @@ Pod::Spec.new do |spec|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   spec.description  = <<-DESC
-                  Coordinator is a Swift Mixin that aims to help you organize your app and transition between views 
+                  Contains tooling for coordinating between views 
                    DESC
 
-  spec.homepage     = "https://github.com/MichiganLabs/Coordinator"
+  spec.homepage     = "https://github.com/MichiganLabs/SwiftArmyKnife"
   # spec.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
 
 
@@ -80,7 +80,7 @@ Pod::Spec.new do |spec|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  spec.source       = { :git => "https://github.com/MichiganLabs/Coordinator", :tag => "#{spec.version}" }
+  spec.source       = { :git => "https://github.com/MichiganLabs/SwiftArmyKnife", :tag => "#{spec.version}" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
