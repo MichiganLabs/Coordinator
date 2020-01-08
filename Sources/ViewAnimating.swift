@@ -1,83 +1,44 @@
 import UIKit
 
-protocol ViewCoordinating {}
-
-/// There are times when you'll need to shove a view controller on screen. The methods defined in this extension
-/// provide a way to `show` a child view controller within a view (which defaults to the presenting view controller's
-/// `view`). You are also able to remove/replace child view controllers by using the respective methods.
-///
-/// Please note: These methods do NOT provide any animation. These methods will simply inject/remove a view controller
-/// as a child and will not animate the process. If you want to animate this process, refer to the methods in the
-/// second extension below.
-extension ViewCoordinating where Self: UIViewController {
-    func show(childViewController viewController: UIViewController) {
-        self.show(childViewController: viewController, in: self.view)
-    }
-
-    func show(childViewController viewController: UIViewController, in container: UIView) {
-        self.addChild(viewController)
-        container.addSubview(viewController.view)
-        viewController.view.frame = container.bounds
-        viewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        viewController.didMove(toParent: self)
-    }
-
-    func remove(childViewController viewController: UIViewController) {
-        viewController.willMove(toParent: nil)
-        viewController.view.removeFromSuperview()
-        viewController.removeFromParent()
-    }
-
-    func replaceContents(with childViewController: UIViewController, in container: UIView? = nil) {
-        // Remove previous child view controllers (if there are any)
-        self.children.forEach {
-            self.remove(childViewController: $0)
-        }
-
-        // Add new child view controller
-        if let container = container {
-            self.show(childViewController: childViewController, in: container)
-        } else {
-            self.show(childViewController: childViewController)
-        }
-    }
-}
-
-/// The `present` / `dismiss` methods intend to mimic the system `present` / `dismiss` methods but give you a little
-/// more control for how the view controllers are animated on/off screen.
-extension ViewCoordinating where Self: UIViewController {
-    struct AnimationOptions {
-        let style: AnimationStyle
-        let direction: AnimationDirection
+struct ViewAnimation {
+    struct Options {
+        let style: Style
+        let direction: Direction
         let duration: TimeInterval
 
-        public init(style: AnimationStyle, direction: AnimationDirection = .left, duration: TimeInterval = 0.35) {
+        public init(style: Style, direction: Direction = .left, duration: TimeInterval = 0.35) {
             self.style = style
             self.direction = direction
             self.duration = duration
         }
     }
 
-    private enum AnimationTransition {
+    fileprivate enum Transition {
         case present
         case dismiss
     }
 
-    enum AnimationStyle {
+    enum Style {
         case replace
         case swipe
     }
 
-    enum AnimationDirection {
+    enum Direction {
         case left
         case right
         case up
         case down
     }
+}
 
+protocol ViewAnimating {}
+
+/// The `present` / `dismiss` methods intend to mimic the system `present` / `dismiss` methods but give you a little
+/// more control for how the view controllers are animated on/off screen.
+extension ViewAnimating where Self: UIViewController & ViewCoordinating {
     func present(
         to newScreen: UIViewController,
-        withOptions options: AnimationOptions,
+        withOptions options: ViewAnimation.Options,
         completion: ((Bool) -> Void)? = nil
     ) {
         self.animate(
@@ -90,7 +51,7 @@ extension ViewCoordinating where Self: UIViewController {
 
     func dismiss(
         to newScreen: UIViewController,
-        withOptions options: AnimationOptions,
+        withOptions options: ViewAnimation.Options,
         completion: ((Bool) -> Void)? = nil
     ) {
         self.animate(
@@ -102,8 +63,8 @@ extension ViewCoordinating where Self: UIViewController {
     }
 
     private func animate(
-        transition: AnimationTransition,
-        options: AnimationOptions,
+        transition: ViewAnimation.Transition,
+        options: ViewAnimation.Options,
         to newScreen: UIViewController,
         completion: ((Bool) -> Void)? = nil
     ) {
@@ -176,8 +137,8 @@ extension ViewCoordinating where Self: UIViewController {
     private func animateSwipe(
         fromScreen: UIViewController,
         toScreen: UIViewController,
-        transition: AnimationTransition,
-        direction: AnimationDirection,
+        transition: ViewAnimation.Transition,
+        direction: ViewAnimation.Direction,
         withDuration duration: TimeInterval
     ) {
         self.addChild(toScreen)
