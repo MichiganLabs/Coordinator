@@ -1,6 +1,6 @@
 import UIKit
 
-protocol ViewCoordinating {}
+public protocol ViewCoordinating {}
 
 /// There are times when you'll need to shove a view controller on screen. The methods defined in this extension
 /// provide a way to `show` a child view controller within a view (which defaults to the presenting view controller's
@@ -9,7 +9,7 @@ protocol ViewCoordinating {}
 /// Please note: These methods do NOT provide any animation. These methods will simply inject/remove a view controller
 /// as a child and will not animate the process. If you want to animate this process, refer to the methods in the
 /// second extension below.
-extension ViewCoordinating where Self: UIViewController {
+public extension ViewCoordinating where Self: UIViewController {
     func show(childViewController viewController: UIViewController) {
         self.show(childViewController: viewController, in: self.view)
     }
