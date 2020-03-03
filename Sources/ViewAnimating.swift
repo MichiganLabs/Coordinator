@@ -1,10 +1,10 @@
 import UIKit
 
-struct ViewAnimation {
-    struct Options {
-        let style: Style
-        let direction: Direction
-        let duration: TimeInterval
+public struct ViewAnimation {
+    public struct Options {
+        public let style: Style
+        public let direction: Direction
+        public let duration: TimeInterval
 
         public init(style: Style, direction: Direction = .left, duration: TimeInterval = 0.35) {
             self.style = style
@@ -18,12 +18,12 @@ struct ViewAnimation {
         case dismiss
     }
 
-    enum Style {
+    public enum Style {
         case replace
         case swipe
     }
 
-    enum Direction {
+    public enum Direction {
         case left
         case right
         case up
@@ -31,11 +31,11 @@ struct ViewAnimation {
     }
 }
 
-protocol ViewAnimating {}
+public protocol ViewAnimating {}
 
 /// The `present` / `dismiss` methods intend to mimic the system `present` / `dismiss` methods but give you a little
 /// more control for how the view controllers are animated on/off screen.
-extension ViewAnimating where Self: UIViewController & ViewCoordinating {
+public extension ViewAnimating where Self: UIViewController & ViewCoordinating {
     func present(
         to newScreen: UIViewController,
         withOptions options: ViewAnimation.Options,
