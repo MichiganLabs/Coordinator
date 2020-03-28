@@ -65,6 +65,10 @@ public extension Coordinator {
 
 /// Protocol to coordinate other `Coordinators`
 public protocol CoordinatorGroup: Coordinator {
+    /// A container for retaining child coordinators so that they do not get de-allocated
+    /// WARNING: Do not set this property, it will be managed for you.
+    var childCoordinators: [Coordinator] { get set }
+
     /// Implementation point for specifying how this Coordinator will embed
     /// the view controllers of its children
     ///
@@ -106,6 +110,9 @@ public extension CoordinatorGroup {
     /// - returns: The UIViewController returned by starting the provided Coordinator
     @discardableResult
     func start(child coordinator: Coordinator) -> UIViewController {
+        // Save the coordinator so that it is retained
+        self.childCoordinators.append(coordinator)
+
         let controller = coordinator.start()
         self.embed(viewController: controller, forChild: coordinator)
         return controller
@@ -115,5 +122,10 @@ public extension CoordinatorGroup {
     func finish(child coordinator: Coordinator) {
         self.eject(coordinator: coordinator)
         coordinator.finish()
+
+        // Remove the coordinator so that we do not retain it anymore
+        if let index = self.childCoordinators.firstIndex(where: { $0 === coordinator }) {
+            self.childCoordinators.remove(at: index)
+        }
     }
 }
